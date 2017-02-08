@@ -2,8 +2,21 @@
 
 <h1>{{ album.album_title }}</h1>
 <h2>{{ album.artists }}</h2>
-<ul>
+
+{% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+{% endif %}
+
+<form action="{% url 'music:favorite' album.id %}" method="post">
+    {% csrf_token %}
     {% for song in album.song_set.all %}
-    <li>{{ song.song_title }} - {{ song.file_type }}</li>
+        <input type="radio" id="song{{ forloop.counter }}" name="song" value="{{ song.id }}">
+        <label for="song{{ forloop.counter }}">
+            {{ song.song_title }}
+            {% if song.is_favorite %}
+                <img src="http://www.seasite.niu.edu/Tagalog/Tagalog_Default_files/Philippine_Culture/Regional%20Cultures/bikolano/star.jpg" height="15" width="15"/>
+            {% endif %}
+        </label><br>
     {% endfor %}
-</ul>
+    <input type="submit" value="Favorite">
+</form>
