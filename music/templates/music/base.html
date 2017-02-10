@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>MusicWorld</title>
+        <title>{% block title %}MusicWorld{% endblock %}</title>
             <!-- Loads the path to your static file -->
             {% load staticfiles %}
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -50,7 +50,7 @@
                     </form>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="">
-                            <a href="#">
+                            <a href="{% url 'music:album-add' %}">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Add Album
                             </a>
                         </li>
