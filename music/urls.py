@@ -5,12 +5,18 @@ app_name = 'music'
 
 urlpatterns = [
     # /music/ homepage
-    url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^$', views.index, name='index'),
 
-    url(r'^register/$', views.UserFormView.as_view(), name='register'),
+    url(r'^register/$', views.register, name='register'),
+    #  /login_user
+    url(r'^login_user/$', views.login, name='login_user'),
+    #  /logout_user
+    url(r'^logout_user/$', views.register, name='logout_user'),
 
     # /music/<album_id>/
-    url(r'^(?P<pk>[0-9]+)/$', views.DetailView.as_view(), name='detail'),
+    url(r'^(?P<album_id>[0-9]+)/$', views.detail, name='detail'),
+    # favorite_song
+    url(r'^(?P<song_id>[0-9]+)/favorite/$', views.favorite, name='favorite'),
 
     # /music/album/add/
     url(r'album/add/$', views.AlbumCreate.as_view(), name='album-add'),
