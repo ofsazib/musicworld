@@ -93,7 +93,7 @@ def detail(request, album_id):
         album = get_object_or_404(Album, pk=album_id)
         return render(request, 'music/detail.html', {'album': album, 'user': user})
 
-# view for check favorite album
+# view for check favorite song
 def favorite(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     try:
@@ -105,3 +105,101 @@ def favorite(request, song_id):
         return JsonResponse({'success': False})
     else:
         return JsonResponse({'success': True})
+
+# view for check favorite album
+def favorite_album(request, album_id):
+    album = get_object_or_404(Album, pk=album_id)
+    try:
+        if album.is_favorite:
+            album.is_favorite = False
+        else:
+            album.is_favorite = True
+        album.save()
+    except (KeyError, Album.DoesNotExist):
+        return JsonResponse({'success': False})
+    else:
+        return JsonResponse({'success': True})
+
+# view for index page
+def index(request):
+    if not request.user.is_authenticated():
+        return render(request, 'music/index.html')
+    else:
+        albums = Album.objects.filter(user=request.user)
+        song_results = Song.objects.all()
+        query = request.GET.get('q')
+        if query:
+            albums = albums.filter(
+                Q(album_title__icontains=query) |
+                q(artist__icontains=query)
+            ).distinct()
+            song_results = song_results.filter(
+                Q(song_title__icontains=query)
+            ).distinct()
+            return render(request, 'music/index.html', {
+                'albums': albums,
+                'songs': song_results,
+            })
+        else:
+            return render(request, 'music/index.html', {'albums': albums})
+
+#  view for logout user
+def logout_user(request):
+    logout(request)
+    form = UserForm(request.POST or None)
+    context = {
+        'form': form
+    }
+    return render(request, 'music/login.html', context)
+
+# view for user login
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_actibe():
+                login(request, user)
+                albums = Album.objects.filter(user=request.user)
+                return render(request, 'music/index.html', {'albums': albums})
+            else:
+                return render(request, 'music/login.html', {'error_message': 'Your account has been disabled'})
+        else:
+            return render(request, 'music/login.html', {'error_message': 'Invalid Login'})
+    return render(request, 'music/login.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                aaa
