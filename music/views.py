@@ -1,20 +1,21 @@
-from django.views import generic
-from .models import Album
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout
+from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
+from .forms import AlbumForm, Songform, UserForm
+from .models import Album, Song
+
+AUDIO_FILE_TYPES = ['wav', 'mp3', 'ogg']
+IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 
 
-class IndexView(generic.ListView):
-    template_name = 'music/index.html'
-    context_object_name = 'all_albums'
-
-    def get_queryset(self):
-        return Album.objects.all()
-
-class DetailView(generic.DetailView):
-    model = Album
-    template_name = 'music/detail.html'
-
-
-class AlbumCreate(CreateView):
-    model = Album
-    fields = ['artists', 'album_title', 'genre', 'album_logo']
+def create_album(request):
+    if not request.user.is_authenticated():
+        return render(request, 'music/login.html')
+    else:
+        form = AlbumForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            album = form.save(commit=False)
+            album.user = request.user
+            album.album_logo = request.FILES['album_logo']
