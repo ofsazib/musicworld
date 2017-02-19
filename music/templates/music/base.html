@@ -50,12 +50,12 @@
                     </form>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="">
-                            <a href="{% url 'music:album-add' %}">
+                            <a href="{% url 'music:create_album' %}">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Add Album
                             </a>
                         </li>
                         <li class="">
-                            <a href="#">
+                            <a href="{% url 'music:logout_user' %}">
                                 <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp; Logout
                             </a>
                         </li>

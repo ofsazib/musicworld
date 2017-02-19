@@ -74,7 +74,7 @@ def create_song(request, album_id):
 def delete_album(request, album_id):
     album = Album.objects.get(pk=album_id)
     album.delete()
-    album  = Album.objects.filter(user=request.user)
+    albums  = Album.objects.filter(user=request.user)
     return render(request, 'music/index.html', {'albums': albums})
 
 #  view for delete song
@@ -159,7 +159,7 @@ def login_user(request):
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None:
-            if user.is_actibe():
+            if user.is_active():
                 login(request, user)
                 albums = Album.objects.filter(user=request.user)
                 return render(request, 'music/index.html', {'albums': albums})
@@ -170,36 +170,41 @@ def login_user(request):
     return render(request, 'music/login.html')
 
 
+#  view for register user
+def register(request):
+    form = UserForm(request.POST or None)
+    if form.is_valid():
+        user = form.save(commit=False)
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user.set_password(password)
+        user.save()
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                albums = Album.objects.filter(user=request.user)
+    context = {
+        'form': form,
+    }
+    return render(request, 'music/register.html', context)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                aaa
+#  view for search song
+def songs(request, filter_by):
+    if not request.user.is_authenticated():
+        return render(request, 'music/login.html')
+    else:
+        try:
+            song_ids = []
+            for album in Album.objects.filter(user=request.user):
+                for song in album.set_song.all():
+                    song_ids.append(song.pk)
+            user_songs = Song.objects.filter(pk__in=song_ids)
+            if filter_by == 'favorite':
+                user_songs = user_songs.filter(is_favorite)
+        except Album.DoesNotExist:
+            user_songs = []
+        return render(request, 'music/songs.html', {
+            'song_title': user_songs,
+            'filter_by': filter_by,
+        })
