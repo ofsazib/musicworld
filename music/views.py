@@ -9,7 +9,7 @@ from .models import Album, Song
 AUDIO_FILE_TYPES = ['wav', 'mp3', 'ogg']
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 
-
+#  view for create album
 def create_album(request):
     if not request.user.is_authenticated():
         return render(request, 'music/login.html')
@@ -35,6 +35,7 @@ def create_album(request):
         }
         return render(request, 'music/create_album.html', context)
 
+#  View for create song
 def create_song(request, album_id):
     form = SongForm(request.POST or None, request.FILES or None)
     album = get_object_or_404(Album, pk=album_id)
@@ -55,7 +56,7 @@ def create_song(request, album_id):
             file_type = file_type.lower()
             if file_type not in AUDIO_FILE_TYPES:
                 context = {
-                    'alnum': album,
+                    'album': album,
                     'form': form,
                     'error_message': 'Audio file must be WAV, MP3 or OGG'
                 }
@@ -68,3 +69,39 @@ def create_song(request, album_id):
             'form': form,
         }
         return render(request, 'music/create_song.html', context)
+
+# view for delete album
+def delete_album(request, album_id):
+    album = Album.objects.get(pk=album_id)
+    album.delete()
+    album  = Album.objects.filter(user=request.user)
+    return render(request, 'music/index.html', {'albums': albums})
+
+#  view for delete song
+def delete_song(request, album_id, song_id):
+    album = get_object_or_404(Album, pk=album_id)
+    song = Song.objects.get(pk=song_id)
+    song.delete()
+    return render(request, 'music/detail.html', {'album': album})
+
+#  view album details
+def detail(request, album_id):
+    if not request.user.is_authenticated():
+        return render(request, 'music/login.html')
+    else:
+        user = request.user
+        album = get_object_or_404(Album, pk=album_id)
+        return render(request, 'music/detail.html', {'album': album, 'user': user})
+
+# view for check favorite album
+def favorite(request, song_id):
+    song = get_object_or_404(Song, pk=song_id)
+    try:
+        if song.is_favorite:
+            song.is_favorite = False
+        else:
+            song.is_favorite = True
+    except (KeyError, Song.DoesNotExist):
+        return JsonResponse({'success': False})
+    else:
+        return JsonResponse({'success': True})
