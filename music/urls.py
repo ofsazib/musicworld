@@ -9,7 +9,7 @@ urlpatterns = [
 
     url(r'^register/$', views.register, name='register'),
     #  /login_user
-    url(r'^login_user/$', views.login, name='login_user'),
+    url(r'^login_user/$', views.login_user, name='login_user'),
     #  /logout_user
     url(r'^logout_user/$', views.register, name='logout_user'),
 

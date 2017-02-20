@@ -40,35 +40,35 @@ def create_song(request, album_id):
     form = SongForm(request.POST or None, request.FILES or None)
     album = get_object_or_404(Album, pk=album_id)
     if form.is_valid():
-        album_songs = album.set_song.all()
-        for s in album_songs:
+        albums_songs = album.song_set.all()
+        for s in albums_songs:
             if s.song_title == form.cleaned_data.get("song_title"):
                 context = {
                     'album': album,
                     'form': form,
-                    'error_message': 'The Song Is already exist'
+                    'error_message': 'You already added that song',
                 }
                 return render(request, 'music/create_song.html', context)
-            song = form.save(commit=False)
-            song.album = album
-            song.audio_file = request.FILES['audio_file']
-            file_type = song.audio_file.url.aplit('.')[-1]
-            file_type = file_type.lower()
-            if file_type not in AUDIO_FILE_TYPES:
-                context = {
-                    'album': album,
-                    'form': form,
-                    'error_message': 'Audio file must be WAV, MP3 or OGG'
-                }
-                return render(request, 'music/create_song.html', context)
+        song = form.save(commit=False)
+        song.album = album
+        song.audio_file = request.FILES['audio_file']
+        file_type = song.audio_file.url.split('.')[-1]
+        file_type = file_type.lower()
+        if file_type not in AUDIO_FILE_TYPES:
+            context = {
+                'album': album,
+                'form': form,
+                'error_message': 'Audio file must be WAV, MP3, or OGG',
+            }
+            return render(request, 'music/create_song.html', context)
 
-            song.save()
-            return render(request, 'music/detail.html', {'album': album})
-        context = {
-            'album': album,
-            'form': form,
-        }
-        return render(request, 'music/create_song.html', context)
+        song.save()
+        return render(request, 'music/detail.html', {'album': album})
+    context = {
+        'album': album,
+        'form': form,
+    }
+    return render(request, 'music/create_song.html', context)
 
 # view for delete album
 def delete_album(request, album_id):
@@ -131,7 +131,7 @@ def index(request):
         if query:
             albums = albums.filter(
                 Q(album_title__icontains=query) |
-                q(artist__icontains=query)
+                Q(artist__icontains=query)
             ).distinct()
             song_results = song_results.filter(
                 Q(song_title__icontains=query)
@@ -154,12 +154,12 @@ def logout_user(request):
 
 # view for user login
 def login_user(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None:
-            if user.is_active():
+            if user.is_active:
                 login(request, user)
                 albums = Album.objects.filter(user=request.user)
                 return render(request, 'music/index.html', {'albums': albums})
