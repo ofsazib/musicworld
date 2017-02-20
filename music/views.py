@@ -101,6 +101,7 @@ def favorite(request, song_id):
             song.is_favorite = False
         else:
             song.is_favorite = True
+        song.save()
     except (KeyError, Song.DoesNotExist):
         return JsonResponse({'success': False})
     else:

@@ -33,13 +33,13 @@
 
                             <!-- Favorite Album -->
                             <a href="{% url 'music:favorite_album' album.id %}" class="btn btn-default btn-sm btn-favorite" role="button">
-                                <span class="glyphicon glyphicon-star">{% if album.is_favorite %}active{% endif %}</span>
+                                <span class="glyphicon glyphicon-star"{% if album.is_favorite %}active{% endif %}></span>
                             </a>
 
                         </div>
                     </div>
                 </div>
-                {% cycle '' '' '' '<div class="clearfix visible-lg"></div>' %}
+                {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
             {% endfor %}
         {% else %}
             <div class="col-sm-12">
