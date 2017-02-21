@@ -128,7 +128,7 @@ MEDIA_URL = '/media/'
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, '..music/static/'),
 )
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 #TEMPLATE_DIRS = ( os.path.join(BASE_DIR, '../templates'),)
 
 DATABASES['default'] = dj_database_url.config()
