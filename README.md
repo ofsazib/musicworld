@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-First create a Virtual environmnet using following command
+1. First create a Virtual environmnet using following command
 
 ```
 python3 -m venv myenv
