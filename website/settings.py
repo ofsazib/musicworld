@@ -125,7 +125,7 @@ MEDIA_URL = '/media/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, '../music/static'),
+    os.path.join(BASE_DIR, '../static'),
 )
 
 DATABASES['default'] = dj_database_url.config()
