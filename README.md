@@ -13,21 +13,12 @@ These instructions will get you a copy of the project up and running on your loc
 ```
 python3 -m venv myenv
 ```
-
-### Installing
-
-A step by step series of examples that tell you have to get a development env running
-
-Say what the step will be
+2. install requirement.txt using following command
+```
+pip install -r requirements.txt
+```
+3. Run the program using following command
 
 ```
-Give the example
+python manage.py runserver
 ```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
