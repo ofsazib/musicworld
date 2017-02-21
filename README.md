@@ -8,10 +8,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+First create a Virtual environmnet using following command
 
 ```
-Give examples
+python3 -m venv myenv
 ```
 
 ### Installing
