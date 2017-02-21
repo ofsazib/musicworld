@@ -124,7 +124,7 @@ def favorite_album(request, album_id):
 # view for index page
 def index(request):
     if not request.user.is_authenticated():
-        return render(request, 'music/index.html')
+        return render(request, 'music/login.html')
     else:
         albums = Album.objects.filter(user=request.user)
         song_results = Song.objects.all()
