@@ -8,21 +8,21 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installation
 
-1. First create a Virtual environmnet using following command
+ 1. First create a Virtual environmnet using following command
 
-```
-python3 -m venv myenv
-```
-2. install requirement.txt using following command
-```
-pip install -r requirements.txt
-```
-3. Run the program using following command
+  ```
+   python3 -m venv myenv
+  ```
+ 2. install requirement.txt using following command
+  ```
+    pip install -r requirements.txt
+  ```
+ 3. Run the program using following command
 
-```
-python manage.py runserver
-```
-4. Now Open your browser and enter
-```
-127.0.0.1:8000(port can be different depending on your server port)
-```
+  ```
+    python manage.py runserver
+  ```
+ 4. Now Open your browser and enter
+  ```
+    27.0.0.1:8000(port can be different depending on your server port)
+  ```
